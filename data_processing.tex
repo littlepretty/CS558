@@ -1,2 +1,16 @@
 \section{Data Processing}
+Among various available datasets~\cite{NSL-KDD, KDDCup, DARPA},
+we choose NSL-KDD dataset~\cite{NSL-KDD} to evaluate the performance of applying
+various deep neural networks to the network intrusion detection problem.
+NSL-KDD dataset originates from the KDDCup 99 dataset~\cite{KDDCup},
+which was used for the third International Knowledge Discovery and Data Mining Tool Competition.
+However, NSL-KDD dataset addresses two issues of the KDDCup 99 dataset.
+First, it eliminates the redundant records existing in KDDCup 99, which takes up
+78\% and 75\% of the records in train and test set, respectively.
+Second, it adds another label, classification difficulty, to each distinct record,
+and samples the dataset such that the fraction of the record
+from a difficulty level is inversely proportional to its difficulty.
+Both enhancements make NSL-KDD dataset more suitable for
+evaluation of intrusion detection systems.
+
 
