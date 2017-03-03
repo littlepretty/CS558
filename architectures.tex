@@ -14,8 +14,24 @@ Recently it revived due to various new training techniques designed by deep lear
 including Stochastic Gradient Descent (SGD),
 batch normalization~\cite{BatchNorm} and Dropout~\cite{Dropout}.
 Expect for the number of neurons in each layer and number of layers,
-MPL can also be tuned with different activation functions.
-The most popular ones are tangent, logistic and rectifier function.
+MPL can also be tuned with different activation functions, or neural types.
+The most popular two, which are used in this project, are logistic function
+and rectifier linear unit.
+Logistic function is written as
+\begin{align}
+        f(x) &= \frac{1}{1 + e^{-x}}
+\end{align}
+It has a very useful property when we applying backpropagation:
+\begin{align}
+        f'(x) &= f(x) (1-f(x))
+\end{align}
+Recently, most deep neural networks adopt rectifier neural unit and achieved very good performance~\cite{DeepLearning}.
+Rectifier linear unit is defined as
+\begin{align}
+        f(x) &= \max(0, x)
+\end{align}
+
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.45\textwidth]{figures/multilayer_perceptron.png}
@@ -39,4 +55,96 @@ Generative model which can be trained unsupervisedly comes to rescue in that
 \end{itemize}
 In this project we propose to try two generative models: restricted Boltzmann machine and autoencoders.
 
+\subsubsection{Restricted Boltzmann Machine}
+Restricted Boltzmann machine (RBM) consists of a layer of hidden units (H) and a layer of visible units (V).
+Here, ``restricted" means that connections are just between hidden and visible layer,
+but not within hidden layers or visible layers.
+This make training RBM faster than Boltzmann machine and feasible for stacking together
+to form deep architecture.
+After learning the first layer RBM, the activity vector of the hidden units can be used
+as ``data" for training the second layer RBM
+and this process can be repeated to learn as many hidden layers as desired.
+As data passing through the RBMs, we can obtain the highest level features 
+which are typically fed into a classifier.
+The entire deep network (RBMs plus the classifier) can be fine-tuned to
+improve the classification performance.
 
+
+
+\subsubsection{Autoencoders}
+An autoencoder neural network is an unsupervised model with typically one hidden layer that
+tries to set the output layer to be equal to the input.
+As shown in Figure~\ref{Fig:AEArchitecture}, we want the network to
+learn a function $h_{W, b}(x) \approx x$.
+However, to prevent the network from learning the meaningless identify function,
+we need to place extra constraints on the network, which introduces many different
+flavors of autoencoders.
+In this project we consider two most popular type of autoencoders, sparse autoencoder and
+denoise autoencoder.
+
+The \textbf{denoising autoencoder} algorithm is proposed by~\cite{DenoiseAE} and illustrated in
+Figure~\ref{Fig:dAEAlgorithm}.
+To prevent learning identify function, an example $\bm{x}$ is first corrupted, either by
+adding Gaussian noise or by random masking a fraction of items in $\bm{x}$ to zero.
+The autoencoder then maps corrupted $\bm{\tilde{x}}$ to a hidden representation $\bm{y} = sigmoid(\bm{W}\tilde{\bm{x}} + \bm{b})$.
+From $\bm{y}$ we reconstruct a $\bm{z}=g_\theta'(\bm{y})$.
+The training needs to learning the parameters $\theta$ and $\theta'$ so that average reconstruction error is minimized over training set.
+For binary input $\bm{x}$, usually cross entropy is adopted as $L_H(\bm{x}, \bm{z})$;
+while mean squared error is used for real-valued $\bm{x}$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{figures/autoencoder.png}
+\caption{General Architecture of Autoencoders.
+        Figure courtesy of~\cite{UFLDLAutoencoder}.}
+\label{Fig:AEArchitecture}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{figures/denoiseautoencoder.png}
+        \caption{The denoising autoencoder algorithm.
+        Input example $\bm{x}$ is randomly corrupted via $q_\mathcal{D}$ and then
+        is mapped via encoder $f_\theta$ to $\bm{y}$.
+        The decoder $g_\theta'$ attempts to reconstruct $\bm{x}$ and produces $\bm{z}$.
+        Reconstruction error is measured by loss $L_H(\bm{x}, \bm{z})$, to be minimized
+        during the training phase.}
+\label{Fig:dAEAlgorithm}
+\end{figure}
+
+The \textbf{sparse autoencoder} works by placing a sparsity constraint on the hidden units~\cite{SparseAE}.
+First, we make the autoencoder's hidden layer size to be over-complete,
+that is of larger size comparing to the dimension of the input.
+Let's denote the activation of hidden unit $j$ of layer 2 in Figure~\ref{Fig:AEArchitecture}
+to be $a^2_j(\bm{x})$ given input example $\bm{x}$.
+With that, we can define the average activation of hidden unit $j$ over the $m$-size
+training set
+\begin{align}
+        \hat{\rho}_j = \frac{1}{m} \sum_{i=1}^{m} a^2_j(\bm{x})
+\end{align}
+The sparsity constraint is enforcing, $\forall$ hidden unit $j$,
+\begin{align}
+        \hat{\rho}_j = \rho
+\end{align}
+where $\rho$ is a sparsity parameter that approximates zero (say 0.05).
+This constraint can be vectorized over the hidden layer, say of size $n_2$,
+with the KL divergence based penalty term
+\begin{align}
+        \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
+        = \sum_j^{n_2} [\rho \log \frac{\rho}{\hat{\rho}_j} + (1 - \rho) \log \frac{1-\rho}{1-\hat{\rho}_j} ]
+\end{align}
+The sparsity penalty term is integrated into the cost function by adding another hyperparameter $\beta$
+\begin{align}
+        L(W, b) = \frac{1}{2}||h_{W,b}(\bm{x}) - \bm{x}||^2 + \beta \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
+\end{align}
+
+Denoise autoencoder and sparse autoencoder, surprisingly, have different application domains.
+Vincent et al.~\cite{DenoiseAE} have shown that stacked denoise autoencoder can be used to
+initialize a deep neural network's weight parameter,
+achieving similar and sometimes better performance than stacked RBM.
+They also show that training stacked denoise autoencoder with MNIST dataset, it is able
+to resynthesize a variety of similarly good quality digits.
+Raina et al.~\cite{SparseAE} have compared sparse encoding with principle component analysis
+(PCA) and argue that transfer raw features with a well unsupervisely trained
+sparse audoencoder can be beneficial to supervised learning algorithm,
+for example support vector machine (SVM).
