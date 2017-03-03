@@ -1,2 +1,19 @@
 \section{Deep Neural Networks}
 
+\subsection{Multilayer Perceptron}
+
+Multilayer perceptron (MLP) is the simplest deep learning classifier in terms of
+design of the architecture.
+It is a fully connected feed-forward neural network, as shown in Figure~\ref{Fig:MLPArchitecture}.
+By introducing non-linear neural units (perceptron), it can distinguish data that are
+not linearly separable.
+However, the non-linearity also make it very hard to train a deep MLP,
+even if people have proposed the efficient back-propagation learning algorithm~\cite{Backpropagation}.
+Recently it revived due to various new training techniques designed by deep learning community,
+including Stochastic Gradient Descent (SGD),
+batch normalization~\cite{BatchNorm} and Dropout~\cite{Dropout}.
+Expect for the number of neurons in each layer and number of layers,
+MPL can also be tuned with different activation functions.
+The most popular ones are tangent, logistic and rectifier function.
+
+\subsection{Autoencoders}
