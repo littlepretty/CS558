@@ -82,6 +82,14 @@ improve the classification performance.
         Prob(h_j = 1) &= sigmoid(b_j + \sum_i{v_i w_{ij}}) \\
 \end{align}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{figures/rbm.png}
+\caption{Restricted Boltzmann Machine.
+        Figure courtesy of https://commons.wikimedia.org/wiki/File:Restricted-boltzmann-machine.svg}
+\label{Fig:RBMArchitecture}
+\end{figure}
+
 
 
 \subsubsection{Autoencoders}
@@ -121,7 +129,8 @@ while mean squared error is used for real-valued $\mathbf{x}$.
         is mapped via encoder $f_\theta$ to $\mathbf{y}$.
         The decoder $g_\theta'$ attempts to reconstruct $\mathbf{x}$ and produces $\mathbf{z}$.
         Reconstruction error is measured by loss $L_H(\mathbf{x}, \mathbf{z})$, to be minimized
-        during the training phase.}
+        during the training phase.
+        Figure courtesy of~\cite{DenoiseAE}.}
 \label{Fig:dAEAlgorithm}
 \end{figure}
 
