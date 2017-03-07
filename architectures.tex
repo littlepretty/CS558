@@ -30,7 +30,14 @@ Rectifier linear unit is defined as
 \begin{align}
         f(x) &= \max(0, x)
 \end{align}
-
+Let $\mathbf{a}^{(l)}$ be the activation of layer $l$,
+$\mathbf{W}^{(l)}$ and $\mathbf{b}^{(l)}$ be layer $l$'s parameter.
+With activation function defined, we have the following recursive formula that describes
+the feed-forward step of the perceptron network.
+\begin{align}
+        \mathbf{z}^{(l+1)} &= \mathbf{W}^{(l)} \mathbf{a}^{(l)} + \mathbf{b}^{(l)} \\
+        \mathbf{a}^{(l+1)} &= f(\mathbf{z}^{(l+1)})
+\end{align}
 
 \begin{figure}[h]
 \centering
@@ -84,13 +91,13 @@ denoise autoencoder.
 
 The \textbf{denoising autoencoder} algorithm is proposed by~\cite{DenoiseAE} and illustrated in
 Figure~\ref{Fig:dAEAlgorithm}.
-To prevent learning identify function, an example $\bm{x}$ is first corrupted, either by
-adding Gaussian noise or by random masking a fraction of items in $\bm{x}$ to zero.
-The autoencoder then maps corrupted $\bm{\tilde{x}}$ to a hidden representation $\bm{y} = sigmoid(\bm{W}\tilde{\bm{x}} + \bm{b})$.
-From $\bm{y}$ we reconstruct a $\bm{z}=g_\theta'(\bm{y})$.
+To prevent learning identify function, an example $\mathbf{x}$ is first corrupted, either by
+adding Gaussian noise or by random masking a fraction of items in $\mathbf{x}$ to zero.
+The autoencoder then maps corrupted $\mathbf{\tilde{x}}$ to a hidden representation $\mathbf{y} = sigmoid(\mathbf{W}\tilde{\mathbf{x}} + \mathbf{b})$.
+From $\mathbf{y}$ we reconstruct a $\mathbf{z}=g_\theta'(\mathbf{y})$.
 The training needs to learning the parameters $\theta$ and $\theta'$ so that average reconstruction error is minimized over training set.
-For binary input $\bm{x}$, usually cross entropy is adopted as $L_H(\bm{x}, \bm{z})$;
-while mean squared error is used for real-valued $\bm{x}$.
+For binary input $\mathbf{x}$, usually cross entropy is adopted as $L_H(\mathbf{x}, \mathbf{z})$;
+while mean squared error is used for real-valued $\mathbf{x}$.
 
 \begin{figure}[h]
 \centering
@@ -104,10 +111,10 @@ while mean squared error is used for real-valued $\bm{x}$.
 \centering
 \includegraphics[width=0.45\textwidth]{figures/denoiseautoencoder.png}
         \caption{The denoising autoencoder algorithm.
-        Input example $\bm{x}$ is randomly corrupted via $q_\mathcal{D}$ and then
-        is mapped via encoder $f_\theta$ to $\bm{y}$.
-        The decoder $g_\theta'$ attempts to reconstruct $\bm{x}$ and produces $\bm{z}$.
-        Reconstruction error is measured by loss $L_H(\bm{x}, \bm{z})$, to be minimized
+        Input example $\mathbf{x}$ is randomly corrupted via $q_\mathcal{D}$ and then
+        is mapped via encoder $f_\theta$ to $\mathbf{y}$.
+        The decoder $g_\theta'$ attempts to reconstruct $\mathbf{x}$ and produces $\mathbf{z}$.
+        Reconstruction error is measured by loss $L_H(\mathbf{x}, \mathbf{z})$, to be minimized
         during the training phase.}
 \label{Fig:dAEAlgorithm}
 \end{figure}
@@ -116,11 +123,11 @@ The \textbf{sparse autoencoder} works by placing a sparsity constraint on the hi
 First, we make the autoencoder's hidden layer size to be over-complete,
 that is of larger size comparing to the dimension of the input.
 Let's denote the activation of hidden unit $j$ of layer 2 in Figure~\ref{Fig:AEArchitecture}
-to be $a^2_j(\bm{x})$ given input example $\bm{x}$.
+to be $a^2_j(\mathbf{x})$ given input example $\mathbf{x}$.
 With that, we can define the average activation of hidden unit $j$ over the $m$-size
 training set
 \begin{align}
-        \hat{\rho}_j = \frac{1}{m} \sum_{i=1}^{m} a^2_j(\bm{x})
+        \hat{\rho}_j = \frac{1}{m} \sum_{i=1}^{m} a^2_j(\mathbf{x})
 \end{align}
 The sparsity constraint is enforcing, $\forall$ hidden unit $j$,
 \begin{align}
@@ -135,7 +142,7 @@ with the KL divergence based penalty term
 \end{align}
 The sparsity penalty term is integrated into the cost function by adding another hyperparameter $\beta$
 \begin{align}
-        L(W, b) = \frac{1}{2}||h_{W,b}(\bm{x}) - \bm{x}||^2 + \beta \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
+        L(W, b) = \frac{1}{2}||h_{W,b}(\mathbf{x}) - \mathbf{x}||^2 + \beta \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
 \end{align}
 
 Denoise autoencoder and sparse autoencoder, surprisingly, have different application domains.
