@@ -63,11 +63,64 @@ Generative model which can be trained unsupervisedly comes to rescue in that
 In this project we propose to try two generative models: restricted Boltzmann machine and autoencoders.
 
 \subsubsection{Restricted Boltzmann Machine}
-Restricted Boltzmann machine (RBM) consists of a layer of hidden units (H) and a layer of visible units (V).
-Here, ``restricted" means that connections are just between hidden and visible layer,
+Restricted Boltzmann machine (RBM)~\cite{RBMTechReport} is a type of energy-based model,
+which associate a scalar energy to each configuration of the variables in the network.
+In energy-based model, learning is the process of configure the network weights so that
+the energy over training data are minimized.
+RBM consists of a layer of hidden units (H) and a layer of visible units (V).
+Here ``restricted" means that connections are just between hidden and visible layer,
 but not within hidden layers or visible layers.
 This make training RBM faster than Boltzmann machine and feasible for stacking together
 to form deep architecture.
+A joint configuration, $(\mathbf{v, h})$ of the visible and hidden units has an energy given by
+\begin{align}
+        E(\mathbf{v, h}) &= -\sum_{i\in visible}a_i v_i - \sum_{j\in hidden}b_j h_j - \sum_{i, j}v_i h_j w_{ij}
+\end{align}
+where $a=\{a_i\}$ and $b=\{b_j\}$ are biases in visible and hidden layer respectively,
+$W=\{w_{ij}\}$ is the weights between them.
+The network assign a probability to every possible pair of $(\mathbf{v, h})$ via this energy
+function
+\begin{align}
+        p(\mathbf{v, h}) &= \frac{1}{Z} e^{-E(\mathbf{v, h})} \\
+        p(\mathbf{v}) &= \frac{1}{Z} \sum_{\mathbf{h}} e^{-E(\mathbf{v, h})}
+\end{align}
+where $Z$ is the partition function that equals to the summation over all possible hidden
+and visible vector pairs
+\begin{align}
+        Z = \sum_{\mathbf{v,h}} e^{-E(\mathbf{v, h})}
+\end{align}
+Based on the ``maximizing log likelihood" idea,
+we want raise the probability of a training example and it can be done by
+adjusting the weights and biases to lower the energy of the considered
+example and raise the energy of the other examples, so that they make big contribution to
+the partition function $Z$:
+\begin{align}
+        \frac{\partial \log p(v)}{\partial w_{ij}} = \langle v_i h_j \rangle_{data} - \langle v_i h_j \rangle_{model} 
+\end{align}
+This implies the following learning rule for performing stochastic gradient ascent on training
+data
+\begin{align}
+        \Delta w_{ij} &= \varepsilon (\langle v_i h_j \rangle_{data} - \langle v_i h_j \rangle_{model})
+\end{align}
+The first term $\langle v_i h_j \rangle_{data}$ is a sample from the data and it is easy to
+compute since there is not directed connection between hidden units.
+The sampling of $h_j$ is based on the probability
+\begin{align}
+        Prob(h_j = 1 | \mathbf{v}) &= sigmoid(b_j + \sum_i{v_i w_{ij}})
+\label{Equ:RBMSampleHidden}
+\end{align}
+Similarly, $v_i$ can be sampled with the following distribution
+\begin{align}
+        Prob(v_i = 1 | \mathbf{h}) &= sigmoid(a_j + \sum_j{h_i w_{ij}})
+\label{Equ:RBMSampleVisible}
+\end{align}
+The term $\langle v_i h_j \rangle_{model}$ can be obtained by performing alternative Gibbs
+sampling for a long time.
+The sampling start from a random visible state.
+Then we update the hidden units in parallel with Equation~\ref{Equ:RBMSampleHidden},
+followed by updating the visible units in parallel with Equation~\ref{Equ:RBMSampleVisible}.
+
+The layer-by-layer training algorithm for stacking RBMs goes in a greedy fashion.
 After learning the first layer RBM, the activity vector of the hidden units can be used
 as ``data" for training the second layer RBM
 and this process can be repeated to learn as many hidden layers as desired.
@@ -76,11 +129,6 @@ which are typically fed into a classifier.
 The entire deep network (RBMs plus the classifier) can be fine-tuned to
 improve the classification performance.
 
-\begin{align}
-        E(\mathbf{v, h}) &= -\sum_i b_i v_i - \sum_j b_j h_j - \sum_{i, j} v_i h_j w_{ij} \\
-        \Delta w_{ij} &= \epsilon (<v_i h_j>_{data} - <v_i h_j>_{reconstruction}) \\
-        Prob(h_j = 1) &= sigmoid(b_j + \sum_i{v_i w_{ij}}) \\
-\end{align}
 
 \begin{figure}[h]
 \centering
