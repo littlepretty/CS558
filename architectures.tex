@@ -69,6 +69,12 @@ which are typically fed into a classifier.
 The entire deep network (RBMs plus the classifier) can be fine-tuned to
 improve the classification performance.
 
+\begin{align}
+        E(\mathbf{v, h}) &= -\sum_i b_i v_i - \sum_j b_j h_j - \sum_{i, j} v_i h_j w_{ij} \\
+        \Delta w_{ij} &= \epsilon (<v_i h_j>_{data} - <v_i h_j>_{reconstruction}) \\
+        Prob(h_j = 1) &= sigmoid(b_j + \sum_i{v_i w_{ij}}) \\
+\end{align}
+
 
 
 \subsubsection{Autoencoders}
