@@ -44,9 +44,6 @@
 \newcommand{\paragraphe}[1]{\vspace{0.03in}\noindent{\em #1} }
 \newcommand{\paragraphbe}[1]{\vspace{0.03in}\noindent{\bf \em #1} }
 
-\newcommand{\kevin}[1]{{\color{red}{#1}}}
-\newcommand{\kevinc}[1]{{\color{red}\bf\em{[kevin: #1]}}}
-
 \newcommand{\name}{DSSnet\xspace}
 \newcommand{\Name}{DSSnet\xspace}
 
@@ -182,12 +179,18 @@ deep learning techniques to the classic network intrusion detection system.
 We specifically look at a well-known public network intrusion dataset and
 compare the performance of several popular deep neural network architectures
 on this particular NSL-KDD dataset.
-At this stage, we
+At this report, we
 \begin{itemize}
-        \item report how we processing the NSL-KDD dataset so that
+        \item describe how we processing the NSL-KDD dataset so that
         it can be fed to deep neural networks;
-        \item briefly introduce each deep neural network considered in this project
+        \item briefly introduce each deep neural network considered in this project;
+        {\color{red}\item implement and train multi-layer percetron, restricted Boltzmann machine,
+                sparse autoencoder and denoising autoencoder in TensorFlow;
+        \item evaluate the classification performance in terms of accuracy, precision,
+                recall as well as F1-Score}\footnote{Contents in red are new progress from mid-term.}
 \end{itemize}
+The listed achievements above will serve as the basis in conducting
+a comparative study of deep learning approaches in network intrusion detection.
 \end{abstract}
 
 %
@@ -198,7 +201,7 @@ At this stage, we
 % We no longer use \terms command
 %\terms{Theory}
 
-\keywords{Network Intrusion Detection; Deep Learning; Machine Learning}
+\keywords{Network Intrusion Detection System; Deep Learning}
 
 \input{intro}
 \input{data_processing}
