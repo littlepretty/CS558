@@ -19,32 +19,33 @@ The most popular two, which are used in this project, are logistic function
 and rectifier linear unit.
 Logistic function is written as
 \begin{align}
-        f(x) &= \frac{1}{1 + e^{-x}}
+    f(x) &= \frac{1}{1 + e^{-x}}
 \end{align}
 It has a very useful property when we applying backpropagation:
 \begin{align}
-        f'(x) &= f(x) (1-f(x))
+    f'(x) &= f(x) (1-f(x))
 \end{align}
 Recently, most deep neural networks adopt rectifier neural unit and achieved very good performance~\cite{DeepLearning}.
 Rectifier linear unit is defined as
 \begin{align}
-        f(x) &= \max(0, x)
+    f(x) &= \max(0, x)
 \end{align}
 Let $\mathbf{a}^{(l)}$ be the activation of layer $l$,
 $\mathbf{W}^{(l)}$ and $\mathbf{b}^{(l)}$ be layer $l$'s parameter.
 With activation function defined, we have the following recursive formula that describes
 the feed-forward step of the perceptron network.
 \begin{align}
-        \mathbf{z}^{(l+1)} &= \mathbf{W}^{(l)} \mathbf{a}^{(l)} + \mathbf{b}^{(l)} \\
-        \mathbf{a}^{(l+1)} &= f(\mathbf{z}^{(l+1)})
+    \mathbf{z}^{(l+1)} &= \mathbf{W}^{(l)} \mathbf{a}^{(l)} + \mathbf{b}^{(l)} \label{Equ:MLPFeedForward1}\\
+    \mathbf{a}^{(l+1)} &= f(\mathbf{z}^{(l+1)})
+    \label{Equ:MLPFeedForward2}
 \end{align}
 
 \begin{figure}[h]
-\centering
-\includegraphics[width=0.45\textwidth]{figures/multilayer_perceptron.png}
-\caption{A perceptron neural network with 1 hidden layer.
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/multilayer_perceptron.png}
+    \caption{A perceptron neural network with 1 hidden layer.
         Figure courtesy of Teijiro Isokawa, Haruhiko Nishimura and Nobuyuki Matsui.}
-\label{Fig:MLPArchitecture}
+    \label{Fig:MLPArchitecture}
 \end{figure}
 
 \subsection{Generative Models}
@@ -56,8 +57,8 @@ In practice, however, the amount of data is impossible for a human security anal
 e.g., to find patterns and label anomalies.
 Generative model which can be trained unsupervisedly comes to rescue in that
 \begin{itemize}
-\item It utilizes the large amount of unlabeled data to learning useful and hierarchical features;
-\item It is actually a way to initialize the weights in a deep neural network, which can be
+    \item It utilizes the large amount of unlabeled data to learning useful and hierarchical features;
+    \item It is actually a way to initialize the weights in a deep neural network, which can be
         further fine-tuned to be a high performance classifier.
 \end{itemize}
 In this project we propose to try two generative models: restricted Boltzmann machine and autoencoders.
@@ -74,20 +75,20 @@ This make training RBM faster than Boltzmann machine and feasible for stacking t
 to form deep architecture.
 A joint configuration, $(\mathbf{v, h})$ of the visible and hidden units has an energy given by
 \begin{align}
-        E(\mathbf{v, h}) &= -\sum_{i\in visible}a_i v_i - \sum_{j\in hidden}b_j h_j - \sum_{i, j}v_i h_j w_{ij}
+    E(\mathbf{v, h}) &= -\sum_{i\in visible}a_i v_i - \sum_{j\in hidden}b_j h_j - \sum_{i, j}v_i h_j w_{ij}
 \end{align}
 where $a=\{a_i\}$ and $b=\{b_j\}$ are biases in visible and hidden layer respectively,
 $W=\{w_{ij}\}$ is the weights between them.
 The network assign a probability to every possible pair of $(\mathbf{v, h})$ via this energy
 function
 \begin{align}
-        p(\mathbf{v, h}) &= \frac{1}{Z} e^{-E(\mathbf{v, h})} \\
-        p(\mathbf{v}) &= \frac{1}{Z} \sum_{\mathbf{h}} e^{-E(\mathbf{v, h})}
+    p(\mathbf{v, h}) &= \frac{1}{Z} e^{-E(\mathbf{v, h})} \\
+    p(\mathbf{v}) &= \frac{1}{Z} \sum_{\mathbf{h}} e^{-E(\mathbf{v, h})}
 \end{align}
 where $Z$ is the partition function that equals to the summation over all possible hidden
 and visible vector pairs
 \begin{align}
-        Z = \sum_{\mathbf{v,h}} e^{-E(\mathbf{v, h})}
+    Z = \sum_{\mathbf{v,h}} e^{-E(\mathbf{v, h})}
 \end{align}
 Based on the ``maximizing log likelihood" idea,
 we want raise the probability of a training example and it can be done by
@@ -95,24 +96,24 @@ adjusting the weights and biases to lower the energy of the considered
 example and raise the energy of the other examples, so that they make big contribution to
 the partition function $Z$:
 \begin{align}
-        \frac{\partial \log p(v)}{\partial w_{ij}} = \langle v_i h_j \rangle_{data} - \langle v_i h_j \rangle_{model} 
+    \frac{\partial \log p(v)}{\partial w_{ij}} = \langle v_i h_j \rangle_{data} - \langle v_i h_j \rangle_{model} 
 \end{align}
 This implies the following learning rule for performing stochastic gradient ascent on training
 data
 \begin{align}
-        \Delta w_{ij} &= \varepsilon (\langle v_i h_j \rangle_{data} - \langle v_i h_j \rangle_{model})
+    \Delta w_{ij} &= \varepsilon (\langle v_i h_j \rangle_{data} - \langle v_i h_j \rangle_{model})
 \end{align}
 The first term $\langle v_i h_j \rangle_{data}$ is a sample from the data and it is easy to
 compute since there is not directed connection between hidden units.
 The sampling of $h_j$ is based on the probability
 \begin{align}
-        Prob(h_j = 1 | \mathbf{v}) &= sigmoid(b_j + \sum_i{v_i w_{ij}})
-\label{Equ:RBMSampleHidden}
+    Prob(h_j = 1 | \mathbf{v}) &= sigmoid(b_j + \sum_i{v_i w_{ij}})
+    \label{Equ:RBMSampleHidden}
 \end{align}
 Similarly, $v_i$ can be sampled with the following distribution
 \begin{align}
-        Prob(v_i = 1 | \mathbf{h}) &= sigmoid(a_j + \sum_j{h_i w_{ij}})
-\label{Equ:RBMSampleVisible}
+    Prob(v_i = 1 | \mathbf{h}) &= sigmoid(a_j + \sum_j{h_i w_{ij}})
+    \label{Equ:RBMSampleVisible}
 \end{align}
 The term $\langle v_i h_j \rangle_{model}$ can be obtained by performing alternative Gibbs
 sampling for a long time.
@@ -131,11 +132,11 @@ improve the classification performance.
 
 
 \begin{figure}[h]
-\centering
-\includegraphics[width=0.45\textwidth]{figures/rbm.png}
-\caption{Restricted Boltzmann Machine.
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/rbm.png}
+    \caption{Restricted Boltzmann Machine.
         Figure courtesy of https://commons.wikimedia.org/wiki/File:Restricted-boltzmann-machine.svg}
-\label{Fig:RBMArchitecture}
+    \label{Fig:RBMArchitecture}
 \end{figure}
 
 
@@ -162,16 +163,16 @@ For binary input $\mathbf{x}$, usually cross entropy is adopted as $L_H(\mathbf{
 while mean squared error is used for real-valued $\mathbf{x}$.
 
 \begin{figure}[h]
-\centering
-\includegraphics[width=0.45\textwidth]{figures/autoencoder.png}
-\caption{General Architecture of Autoencoders.
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/autoencoder.png}
+    \caption{General Architecture of Autoencoders.
         Figure courtesy of~\cite{UFLDLAutoencoder}.}
-\label{Fig:AEArchitecture}
+    \label{Fig:AEArchitecture}
 \end{figure}
 
 \begin{figure}[h]
-\centering
-\includegraphics[width=0.45\textwidth]{figures/denoiseautoencoder.png}
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/denoiseautoencoder.png}
         \caption{The denoising autoencoder algorithm.
         Input example $\mathbf{x}$ is randomly corrupted via $q_\mathcal{D}$ and then
         is mapped via encoder $f_\theta$ to $\mathbf{y}$.
@@ -179,7 +180,7 @@ while mean squared error is used for real-valued $\mathbf{x}$.
         Reconstruction error is measured by loss $L_H(\mathbf{x}, \mathbf{z})$, to be minimized
         during the training phase.
         Figure courtesy of~\cite{DenoiseAE}.}
-\label{Fig:dAEAlgorithm}
+    \label{Fig:dAEAlgorithm}
 \end{figure}
 
 The \textbf{sparse autoencoder} works by placing a sparsity constraint on the hidden units~\cite{SparseAE}.
@@ -190,22 +191,23 @@ to be $a^2_j(\mathbf{x})$ given input example $\mathbf{x}$.
 With that, we can define the average activation of hidden unit $j$ over the $m$-size
 training set
 \begin{align}
-        \hat{\rho}_j = \frac{1}{m} \sum_{i=1}^{m} a^2_j(\mathbf{x})
+    \hat{\rho}_j = \frac{1}{m} \sum_{i=1}^{m} a^2_j(\mathbf{x})
 \end{align}
 The sparsity constraint is enforcing, $\forall$ hidden unit $j$,
 \begin{align}
-        \hat{\rho}_j = \rho
+    \hat{\rho}_j = \rho
 \end{align}
 where $\rho$ is a sparsity parameter that approximates zero (say 0.05).
 This constraint can be vectorized over the hidden layer, say of size $n_2$,
 with the KL divergence based penalty term
 \begin{align}
-        \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
-        = \sum_j^{n_2} [\rho \log \frac{\rho}{\hat{\rho}_j} + (1 - \rho) \log \frac{1-\rho}{1-\hat{\rho}_j} ]
+    \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
+    = \sum_j^{n_2} [\rho \log \frac{\rho}{\hat{\rho}_j} + (1 - \rho) \log \frac{1-\rho}{1-\hat{\rho}_j} ]
 \end{align}
 The sparsity penalty term is integrated into the cost function by adding another hyperparameter $\beta$
 \begin{align}
-        L(W, b) = \frac{1}{2}||h_{W,b}(\mathbf{x}) - \mathbf{x}||^2 + \beta \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
+    L(W, b) = \frac{1}{2}||h_{W,b}(\mathbf{x}) - \mathbf{x}||^2 +
+    \beta \sum_j^{n_2} KL(\rho || \hat{\rho}_j)
 \end{align}
 
 Denoise autoencoder and sparse autoencoder, surprisingly, have different application domains.
