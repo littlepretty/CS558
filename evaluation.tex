@@ -1,1 +1,160 @@
 \section{Experiment Results}
+
+\subsection{Evaluation Metrics}
+We evaluate the classification performance of our proposed deep learning approaches
+with the following metrics.
+\begin{itemize}
+    \item \textbf{Accuracy} is the percentage of correctly classified connections
+        over the total number of connections in the dataset:
+        \begin{align}
+            A = \frac{\text{Correct Predictions}}{\text{Number of Records}}
+        \end{align} 
+        Accuracy is not suitable for evaluating biased dataset where the number
+        of records of some class is extremely larger than the number of
+        records of another class.
+        In NSL-KDD dataset, the number of available U2R records (67)
+        is in two degrees of magnitude less than the other classes of traffic (9711, 7458, 2887, 2121 respectively).
+        Therefore we also consider the following metrics.
+    \item \textbf{Precision} is the percentage of the correctly classified positives over
+        the total number of positives predicted by the classifier:
+                \begin{align}
+                    P = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}
+                \end{align}
+            \item \textbf{Recall} is the percentage of the correctly classified positives over
+                the total number of relevant elements:
+                \begin{align}
+                    R = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}
+                \end{align}
+            \item \textbf{F1-Score} represents a balance between precision and recall and is calculated
+                as their harmonic mean:
+                \begin{align}
+                    F = \frac{2PR}{P + R}
+                \end{align}
+\end{itemize}
+Besides, we also provide the confusion matrix of the classification results when applying
+different approaches on the test dataset.
+In our confusion matrix table, the row represents the instance in an actual class,
+while the column represents the instance in a predicted class.
+This table is useful for visualizing how the adopted approach is confusing one class with
+other classes.
+
+\subsection{Performance of Deep Learning Approaches}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.48\textwidth]{figures/comp_accuracy.pdf}
+    \caption{Classification Accuracy of Proposed Approaches}
+    \label{Fig:CompAccuracy}
+\end{figure}
+
+\begin{table}[t]
+    \caption{Confusion Matrix of MLP on Test Dataset}
+    \centering
+    \begin{tabular}{cc|rrrrr}
+        \hline
+        &  & \multicolumn{5}{c}{Prediction} \\
+                        &        & Normal & Probe & DoS & U2R & R2L\\
+        \hline
+        \hline
+        \multirow{5}{*}{Actual} & Normal & 8788 &  316 &  473 &  67 &   67 \\
+                                &  Probe &   13 & 2111 &  235 &  13 &   53 \\
+                                &  DoS   &  798 &  157 & 6258 & 420 &    4 \\
+                                &  U2R   &  337 &    4 &    1 &  50 &    4 \\
+                                &  R2L   &  869 &  126 &    3 & 491 &  887 \\
+        \hline
+        \multicolumn{2}{c|}{Precision(\%)}   & 96.10& 77.65& 79.90&  9.09& 31.36\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{71.88}\\
+        \hline
+        \multicolumn{2}{c|}{Recall(\%)}      & 74.92& 80.85& 95.19& 10.06& 75.10 \\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{68.66}\\
+        \hline
+        \multicolumn{2}{c|}{F1-Score(\%)}    & 84.20& 79.22& 86.88&  9.55& 44.24 \\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{68.73}\\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[t]
+    \caption{Confusion Matrix of RBM on Test Dataset}
+    \centering
+    \begin{tabular}{cc|rrrrr}
+        \hline
+        &  & \multicolumn{5}{c}{Prediction} \\
+                        &        & Normal & Probe & DoS & U2R & R2L\\
+        \hline
+        \hline
+        \multirow{5}{*}{Actual} & Normal & 8788 &  316 &  473 &  67 &   67 \\
+                                & Probe  &   13 & 2111 &  235 &  13 &   53 \\
+                                & DoS    &  798 &  157 & 6258 & 420 &    4 \\
+                                & U2R    &  337 &    4 &    1 &  50 &    4 \\
+                                & R2L    &  869 &  126 &    3 & 491 &  887 \\
+        \hline
+        \multicolumn{2}{c|}{Precision(\%)}   & 81.34& 77.78& 89.78& 4.80& 87.39\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{71.04}\\
+        \hline
+        \multicolumn{2}{c|}{Recall(\%)}      & 90.50& 87.05& 81.95& 12.63 &37.33\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{73.65}\\
+        \hline
+        \multicolumn{2}{c|}{F1-Score(\%)}    & 85.67& 82.16& 85.69 &6.96 &52.31\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{70.84}\\
+        \hline
+
+    \end{tabular}
+\end{table}
+
+\begin{table}[t]
+    \caption{Confusion Matrix of SAE on Test Dataset}
+    \centering
+    \begin{tabular}{cc|rrrrr}
+        \hline
+        &  & \multicolumn{5}{c}{Prediction} \\
+                        &        & Normal & Probe & DoS & U2R  & R2L\\
+        \hline
+        \hline
+        \multirow{5}{*}{Actual}  & Normal & 8864 &  696 &   92 &   11 &   48 \\
+                                 & Probe  &  179 & 2001 &  164 &    2 &   79 \\
+                                 & DoS    & 1542 &   39 & 6054 &    0 &    1 \\
+                                 & U2R    &  357 &    1 &    1 &   30 &    7 \\
+                                 & R2L    & 1444 &    6 &    5 &   26 &  895 \\
+        \hline
+        \multicolumn{2}{c|}{Precision(\%)}    & 71.56& 72.95& 95.85& 43.48& 86.89\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}    & \multicolumn{5}{r}{81.06}\\
+        \hline
+        \multicolumn{2}{c|}{Recall(\%)}       & 91.28& 82.52& 79.28&  7.58& 37.67\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}    & \multicolumn{5}{r}{79.15}\\
+        \hline
+        \multicolumn{2}{c|}{F1-Score(\%)}     & 80.23& 77.44& 86.78& 12.90& 52.55\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}    & \multicolumn{5}{r}{\color{red}78.05}\\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[t]
+    \caption{Confusion Matrix of DAE on Test Dataset}
+    \centering
+    \begin{tabular}{cc|rrrrr}
+        \hline
+        &  & \multicolumn{5}{c}{Prediction} \\
+                        &        & Normal & Probe & DoS & U2R & R2L\\
+        \hline
+        \hline
+        \multirow{5}{*}{Actual} & Normal & 9249 &  319 &   85 &  10 &  48 \\
+                                & Probe  & 576  & 1504 &  226 &   2 & 117 \\
+                                & DoS    & 1842 &  128 & 5665 &   0 &   1 \\
+                                & U2R    & 353  &    1 &    0 &  38 &   4 \\
+                                & R2L    & 1469 &    3 &    1 &  17 & 886 \\
+        \hline
+        \multicolumn{2}{c|}{Precision(\%)} & 68.57& 76.93& 94.78& 56.72& 83.90\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)} & \multicolumn{5}{r}{79.75}\\
+        \hline
+        \multicolumn{2}{c|}{Recall(\%)}    & 95.24& 62.02& 74.19&  9.60& 37.29\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)} & \multicolumn{5}{r}{76.93}\\
+        \hline
+        \multicolumn{2}{c|}{F1-Score(\%)}  & 79.73& 68.68& 83.23& 16.41& 51.63\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)} & \multicolumn{5}{r}{75.65}\\
+        \hline
+    \end{tabular}
+\end{table}
+
