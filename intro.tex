@@ -5,9 +5,19 @@ for malicious activities or policy violations.
 By intercepting and analysing the incoming or outgoing traffics through the network,
 it raises alarm if intrusion or attack is observed.
 There are two general approaches to detect intrusions.
-In signature based intrusion detection, e.g. SNORT, rules for specific attacks
+In signature based intrusion detection, e.g. SNORT~\cite{Snort}, rules for specific attacks
 are pre-installed in the system.
-It 
+It raises alarm when traffic match the signature of known attacks.
+The major drawbacks of signature matching approach is that
+it is only effective for previously detected attacks that have an identifiable signature.
+As a result, signature database needs to be manually updated whenever a new type of attack
+is discovered, with significant effort, by the network administrator.
+Anomaly detection based approach overcomes the these limitations by adopting a certain
+type of machine learning technique to model the trustworthy network activities.
+Traffics that significantly deviates from the built model are treated as malicious.
+This idea have been shown to be able to detect unknown or novel attacks~\cite{NSL-KDD, STL-NIDS}.
+
+
 
 
 More background information will be available in the final report,
