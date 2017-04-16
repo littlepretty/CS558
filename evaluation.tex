@@ -20,25 +20,57 @@ with the following metrics.
                 \begin{align}
                     P = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}
                 \end{align}
-            \item \textbf{Recall} is the percentage of the correctly classified positives over
-                the total number of relevant elements:
+    \item \textbf{Recall} is the percentage of the correctly classified positives over
+        the total number of relevant elements:
                 \begin{align}
                     R = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}
                 \end{align}
-            \item \textbf{F1-Score} represents a balance between precision and recall and is calculated
-                as their harmonic mean:
+    \item \textbf{F1-Score} represents a balance between precision and recall and is calculated
+        as their harmonic mean:
                 \begin{align}
                     F = \frac{2PR}{P + R}
                 \end{align}
 \end{itemize}
+In the 5-class classification, we calculate the precision, recall and F1-Score for each traffic class.
+Additionally, we report the weighted average of these metrics as a single value for comparing various approaches.
+The weight for each class is determined by its proportion in the test dataset.
+The weight vector for class [Normal, DoS, U2R, R2L, Probe] is [0.431, 0.331, 0.003, 0.128, 0.107].
 Besides, we also provide the confusion matrix of the classification results when applying
 different approaches on the test dataset.
 In our confusion matrix table, the row represents the instance in an actual class,
 while the column represents the instance in a predicted class.
-This table is useful for visualizing how the adopted approach is confusing one class with
-other classes.
+It is called confusion matrix because it is useful for visualizing how a classifier
+is confusing one class with other class(es).
+
 
 \subsection{Performance of Deep Learning Approaches}
+First we report the classification accuracy of each considered approach in Figure~\ref{Fig:CompAccuracy}.
+Surprisingly, the most ``accurate" approach is the simple 16-neuron perceptron (80.27\%).
+Sparse autoencoder based self-taught leaner achieved second best accuracy of 79.15\%.
+This number coincide with the previously reported results in~\cite{STL-NIDS} (79.10\%).
+RBM and denoising autoencoder have similar results (77.58\% and 76.93\%).
+
+Table~\ref{Tab:ConfusionMatrixMLP} --~\ref{Tab:ConfusionMatrixDAE} summarize the confusion matrix
+of each approach and their weighted average metrics.
+Even though MLP achieved best accuracy, its F1-Score, less than 70\%, is the worst among
+all of the considered approaches.
+We can see that for U2R attacks, MLP has very poor results for both precision and recall.
+The highest F1-Score is achieved by sparse autoencoder combined with softmax regression (78.05\%).
+This value is actually even a little bit higher than the result (75.76\%) reported in~\cite{STL-NIDS}.
+We believe this is partly due to the reason that we did not introduce regularization
+for both sparse autoencoder and softmax regression classifier, and partly due to the dropout technique
+we used in training the softmax regression classifier.
+RBM and DAE again achieved very similar classification performance,
+with F1-Score of 75.63\% and 75.65\% respectively.
+Considering the relative high accuracy and best F1-Score, we conclude that in the competition of
+5-class classification, sparse autoencoder is the winner.
+
+Confusion matrices here tell us the something interesting about each approach.
+For example, DAE correctly recognized the most number of normal traffics (9294 out of 9711).
+The most ``accurate" classifier MLP correctly recognize the most number of Probe (2111 out of 2421),
+DoS (6258 out of 7458) and U2R (50 out of 67) attacks.
+Sparse autoencoder identified the most number of R2L attacks (895 out of 2887)
+
 
 \begin{figure}[h]
     \centering
@@ -72,6 +104,7 @@ other classes.
         \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{68.73}\\
         \hline
     \end{tabular}
+    \label{Tab:ConfusionMatrixMLP}
 \end{table}
 
 
@@ -100,6 +133,7 @@ other classes.
         \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{75.63}\\
         \hline
     \end{tabular}
+    \label{Tab:ConfusionMatrixRBM}
 \end{table}
 
 \begin{table}[t]
@@ -127,6 +161,7 @@ other classes.
         \multicolumn{2}{c|}{Wtd. Avg.(\%)}    & \multicolumn{5}{r}{\color{red}78.05}\\
         \hline
     \end{tabular}
+    \label{Tab:ConfusionMatrixSAE}
 \end{table}
 
 
@@ -155,5 +190,6 @@ other classes.
         \multicolumn{2}{c|}{Wtd. Avg.(\%)} & \multicolumn{5}{r}{75.65}\\
         \hline
     \end{tabular}
+    \label{Tab:ConfusionMatrixDAE}
 \end{table}
 
