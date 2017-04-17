@@ -52,15 +52,7 @@
 \newdef{definition}{Definition}
 
 % *** For commenting blocks of text ***
-%\newcommand{\CUT}[1]{{}}
 \begin{document}
-
-%\begin{comment}
-% DOI
-%\doi{000-0-0000-0 00-0}
-
-% ISBN
-%\isbn{0000000/0000}
 
 \CopyrightYear{2017} \setcopyright{acmcopyright}
 \conferenceinfo{CS 558 Spring '17,}{March 10th, 2017, Chicago.}
@@ -69,7 +61,6 @@
 %Authors, replace the red X's with your assigned DOI string.
 \clubpenalty=10000
 \widowpenalty = 10000
-%\end{comment}
 
 %
 % --- Author Metadata here ---
@@ -107,8 +98,6 @@
 % without further effort on your part as the last section in
 % the body of your article BEFORE References or any Appendices.
 
-
-%\begin{comment}
 \numberofauthors{2} %  in this sample file, there are a *total*
 % of EIGHT authors. SIX appear on the 'first-page' (for formatting
 % reasons) and the remaining two appear in the \additionalauthors section.
@@ -128,24 +117,24 @@
 % 1st. author
 \alignauthor
 Jiaqi Yan\\
-      \affaddr{Illinois Institute of Technology}\\
-       \affaddr{10 West 31st Street}\\
-       \affaddr{Chicago, Illinois, 60616 }\\
-       \email{jyan31@hawk.iit.edu}
+\affaddr{Illinois Institute of Technology}\\
+\affaddr{10 West 31st Street}\\
+\affaddr{Chicago, Illinois, 60616 }\\
+\email{jyan31@hawk.iit.edu}
 % 2nd. author
 \alignauthor
 Dong Jin\\
-       \affaddr{Illinois Institute of Technology}\\
-       \affaddr{10 West 31st Street}\\
-       \affaddr{Chicago, Illinois, 60616 }\\
-       \email{dong.jin@iit.edu}
+\affaddr{Illinois Institute of Technology}\\
+\affaddr{10 West 31st Street}\\
+\affaddr{Chicago, Illinois, 60616 }\\
+\email{dong.jin@iit.edu}
 % 3rd. author
 %\alignauthor
 %Dong Jin\\
-       %\affaddr{Illinois Institute of Technology}\\
-       %\affaddr{10 West 31st Street}\\
-       %\affaddr{Chicago, Illinois, 60616 }\\
-       %\email{dong.jin@iit.edu}
+%\affaddr{Illinois Institute of Technology}\\
+%\affaddr{10 West 31st Street}\\
+%\affaddr{Chicago, Illinois, 60616 }\\
+%\email{dong.jin@iit.edu}
 %\and  % use '\and' if you need 'another row' of author names
 %% 4th. author
 %\alignauthor Lawrence P. Leipuner\\
@@ -167,7 +156,7 @@ Dong Jin\\
 %       \email{cpalmer@prl.com}
 }
 
-%\end{comment}
+
 
 \maketitle
 \begin{abstract}
@@ -175,19 +164,18 @@ Recently, a handful of novel deep neural networks have achieved unprecedentedly
 good performance on image classification, natural language processing,
 speech recognition and many other artificial intelligence related research fields.
 In this project we investigate the possibility of applying the cutting edge
-deep learning techniques to the classic network intrusion detection system.
-We specifically look at a well-known public network intrusion dataset and
-compare the performance of several popular deep neural network architectures
-on this particular NSL-KDD dataset.
-At this report, we
+deep learning techniques to the network intrusion detection system.
+We specifically look at a well-known public offline NSL-KDD network intrusion dataset and
+compare the performance of several popular deep neural network architectures.
+In this project, we
 \begin{itemize}
-        \item describe how we processing the NSL-KDD dataset so that
+    \item describe how we processing the NSL-KDD dataset so that
         it can be fed to deep neural networks;
-        \item briefly introduce each deep neural network considered in this project;
-        {\color{red}\item implement and train multi-layer percetron, restricted Boltzmann machine,
-                sparse autoencoder and denoising autoencoder in TensorFlow;
-        \item evaluate the classification performance in terms of accuracy, precision,
-                recall as well as F1-Score}\footnote{Contents in red are new progress from mid-term.}
+    \item briefly introduce each deep neural network considered in this project;
+    {\color{red}\item implement and train multi-layer percetron, restricted Boltzmann machine,
+        sparse autoencoder and denoising autoencoder in TensorFlow;
+    \item evaluate the classification performance in terms of accuracy, precision,
+        recall as well as F1-Score}\footnote{Contents in red are new progress from mid-term.}
 \end{itemize}
 The listed achievements above will serve as the basis in conducting
 a comparative study of deep learning approaches in network intrusion detection.

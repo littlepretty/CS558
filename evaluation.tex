@@ -34,7 +34,7 @@ with the following metrics.
 In the 5-class classification, we calculate the precision, recall and F1-Score for each traffic class.
 Additionally, we report the weighted average of these metrics as a single value for comparing various approaches.
 The weight for each class is determined by its proportion in the test dataset.
-The weight vector for class [Normal, DoS, U2R, R2L, Probe] is [0.431, 0.331, 0.003, 0.128, 0.107].
+The weight vector for class [Normal, Probe, DoS, U2R, R2L] is [0.431, 0.107, 0.339, 0.018, 0.105].
 Besides, we also provide the confusion matrix of the classification results when applying
 different approaches on the test dataset.
 In our confusion matrix table, the row represents the instance in an actual class,
@@ -45,32 +45,10 @@ is confusing one class with other class(es).
 
 \subsection{Performance of Deep Learning Approaches}
 First we report the classification accuracy of each considered approach in Figure~\ref{Fig:CompAccuracy}.
-Surprisingly, the most ``accurate" approach is the simple 16-neuron perceptron (80.27\%).
+Surprisingly, the most ``accurate" approach is the simple 16-neuron perceptron (80.90\%).
 Sparse autoencoder based self-taught leaner achieved second best accuracy of 79.15\%.
 This number coincide with the previously reported results in~\cite{STL-NIDS} (79.10\%).
-RBM and denoising autoencoder have similar results (77.58\% and 76.93\%).
-
-Table~\ref{Tab:ConfusionMatrixMLP} --~\ref{Tab:ConfusionMatrixDAE} summarize the confusion matrix
-of each approach and their weighted average metrics.
-Even though MLP achieved best accuracy, its F1-Score, less than 70\%, is the worst among
-all of the considered approaches.
-We can see that for U2R attacks, MLP has very poor results for both precision and recall.
-The highest F1-Score is achieved by sparse autoencoder combined with softmax regression (78.05\%).
-This value is actually even a little bit higher than the result (75.76\%) reported in~\cite{STL-NIDS}.
-We believe this is partly due to the reason that we did not introduce regularization
-for both sparse autoencoder and softmax regression classifier, and partly due to the dropout technique
-we used in training the softmax regression classifier.
-RBM and DAE again achieved very similar classification performance,
-with F1-Score of 75.63\% and 75.65\% respectively.
-Considering the relative high accuracy and best F1-Score, we conclude that in the competition of
-5-class classification, sparse autoencoder is the winner.
-
-Confusion matrices here tell us something interesting about each approach.
-For example, DAE correctly recognized the most number of normal traffics (9294 out of 9711).
-The most ``accurate" classifier MLP correctly recognize the most number of Probe (2111 out of 2421),
-DoS (6258 out of 7458) and U2R (50 out of 67) attacks.
-Sparse autoencoder identified the most number of R2L attacks (895 out of 2887)
-
+RBM and denoising autoencoder have similar accuracy results (77.58\% and 76.93\%).
 
 \begin{figure}[h]
     \centering
@@ -78,6 +56,29 @@ Sparse autoencoder identified the most number of R2L attacks (895 out of 2887)
     \caption{Classification Accuracy of Proposed Approaches}
     \label{Fig:CompAccuracy}
 \end{figure}
+
+Table~\ref{Tab:ConfusionMatrixMLP} --~\ref{Tab:ConfusionMatrixDAE} summarize the confusion matrix
+of each approach and their weighted average metrics.
+Apart from best accuracy, MLP also achieved the best F1-Score (79.64\%)
+among all of the considered approaches.
+However, we can see that for U2R attacks, MLP still has very poor results of
+both precision (13.19\%) and recall (9.60\%).
+The second highest F1-Score is achieved by sparse autoencoder combined with softmax regression (78.05\%).
+This value is actually a little bit higher than the result (75.76\%) reported in~\cite{STL-NIDS}.
+We believe this is partly due to the reason that we did not introduce regularization
+for both sparse autoencoder and softmax regression classifier,
+and partly due to the dropout technique we used in training the softmax regression classifier.
+RBM and DAE again achieved very similar classification performance,
+with F1-Score of 75.63\% and 75.65\% respectively.
+Considering both the high accuracy and best F1-Score, we conclude that in the competition of
+5-class classification, MLP is the winner.
+
+Confusion matrices here tell us something interesting about the 
+MLP correctly recognized the most number of normal traffics (9343 out of 9711).
+For the attacking traffics, the winner classifier MLP correctly predicted the most
+number of Probe (2111 out of 2425) and DoS (6155 out of 7636) attacks.
+Both MLP and DAE correctly discovered the most number of U2R attacks (38 out of 396).
+Sparse autoencoder identified the most number of R2L attacks (895 out of 2376).
 
 \begin{table}[t]
     \caption{Confusion Matrix of MLP on Test Dataset}
@@ -88,20 +89,20 @@ Sparse autoencoder identified the most number of R2L attacks (895 out of 2887)
                         &        & Normal & Probe & DoS & U2R & R2L\\
         \hline
         \hline
-        \multirow{5}{*}{Actual} & Normal & 8788 &  316 &  473 &  67 &   67 \\
-                                &  Probe &   13 & 2111 &  235 &  13 &   53 \\
-                                &  DoS   &  798 &  157 & 6258 & 420 &    4 \\
-                                &  U2R   &  337 &    4 &    1 &  50 &    4 \\
-                                &  R2L   &  869 &  126 &    3 & 491 &  887 \\
+        \multirow{5}{*}{Actual} & Normal & 9343 &  229 &   64 &  26 &  49 \\
+                                &  Probe &  201 & 1925 &  227 &   9 &  63 \\
+                                &  DoS   & 1332 &   68 & 6155 &  47 &  34 \\
+                                &  U2R   &  347 &    4 &    0 &  38 &   7 \\
+                                &  R2L   & 1393 &   37 &    1 & 168 & 777 \\
         \hline
-        \multicolumn{2}{c|}{Precision(\%)}   & 96.10& 77.65& 79.90&  9.09& 31.36\\
-        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{71.88}\\
+        \multicolumn{2}{c|}{Precision(\%)}   & 74.06 & 85.06 & 95.47 & 13.19 & 83.55\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{82.43}\\
         \hline
-        \multicolumn{2}{c|}{Recall(\%)}      & 74.92& 80.85& 95.19& 10.06& 75.10 \\
-        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{68.66}\\
+        \multicolumn{2}{c|}{Recall(\%)}      & 96.21 & 79.38 & 80.61 &  9.6  & 32.7\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{80.90}\\
         \hline
-        \multicolumn{2}{c|}{F1-Score(\%)}    & 84.20& 79.22& 86.88&  9.55& 44.24 \\
-        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{68.73}\\
+        \multicolumn{2}{c|}{F1-Score(\%)}    & 83.69 & 82.12 & 87.41 & 11.11 & 47.01\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{\color{red}79.64}\\
         \hline
     \end{tabular}
     \label{Tab:ConfusionMatrixMLP}

@@ -120,6 +120,21 @@ sampling for a long time.
 The sampling start from a random visible state.
 Then we update the hidden units in parallel with Equation~\ref{Equ:RBMSampleHidden},
 followed by updating the visible units in parallel with Equation~\ref{Equ:RBMSampleVisible}.
+Instead of doing alternating Gibbs sampling for a large number of iterations,
+~\cite{TrainCD} proposed contrastive divergence (CD) as a faster learning procedure.
+The training also start with a training vector to compute the states of the hidden units
+using Equation~\ref{Equ:RBMSampleHidden}.
+Then, with the chosen hidden states, we reconstruct the visible states by sampling each $v_i$
+with probability given in Equation~\ref{Equ:RBMSampleVisible}.
+The change of weight is then computed by
+\begin{align}
+    \Delta w_{ij} = \varepsilon (\langle v_i h_j \rangle_{data} -
+    \langle v_i h_j \rangle_{reconstruct})
+    \label{Equ:RBMCD1}
+\end{align}
+This is called contrastive divergence using one full step of alternating Gibbs sampling.
+Contrastive divergence with $n$ rounds of alternating Gibbs sampling
+is usually denoted as CD$n$.
 
 The layer-by-layer training algorithm for stacking RBMs goes in a greedy fashion.
 After learning the first layer RBM, the activity vector of the hidden units can be used

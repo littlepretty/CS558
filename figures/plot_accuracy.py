@@ -5,7 +5,7 @@ import matplotlib
 
 matplotlib.rc('font', size=18)
 machines = ['MLP', 'RBM', 'SAE', 'DAE']
-accuracy = [80.2741, 77.5816, 79.1519, 76.9251]
+accuracy = [80.8996, 77.5816, 79.1519, 76.9251]
 width = 0.4
 ind = np.arange(len(machines))
 
@@ -16,7 +16,7 @@ ax.set_xlabel('Classifiers')
 ax.set_xticks(ind + width / 2)
 ax.set_xticklabels(machines)
 ax.set_xlim([-0.5, len(machines)])
-ax.set_ylim([70, 82])
+ax.set_ylim([70, 84])
 plt.grid()
 
 
