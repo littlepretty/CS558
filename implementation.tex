@@ -39,7 +39,7 @@ For the multiple layer perceptron, we tried a 4-hidden-layer network with
 very wide size in each layer, several hundreds for each layer.
 The accuracy on training set is very exiting, usually more than 96\%.
 However, its performance on test dataset is not satisfactory at all.
-Instead we found out that a single hidden layer with only sixteen neurons has terrific accuracy.
+Instead we found out that a single hidden layer with only forty neurons has terrific accuracy.
 It is trained with stochastic gradient descent (SGD) for 20 epochs and batch size 100.
 During the training, learning rate decays from 0.1 exponentially with the base of 0.32.
 We did not include regularization in the model, but did apply dropout of keep probability 0.8.
