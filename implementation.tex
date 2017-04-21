@@ -2,8 +2,8 @@
 
 \subsection{TensorFlow 101}
 TensorFlow~\cite{TensorFlow} is an open-source software library for machine learning developed by the Google Brain Team.
-The library models the computations in machine learning as data flow graphs.
-Multidimensional data arrays are called tensors in TensorFlow.
+Multidimensional data arrays are presented as tensor data structure in TensorFlow.
+The user of the library can constructs a graph to implement any general machine learning algorithm.
 Nodes in the graph represent mathematical operations between tensors,
 such as add, multiply, softmax and dropout.
 Graph edges represent the flow of tensors between nodes.
@@ -81,6 +81,4 @@ of the softmax regression classifier such that the learnt features from RBM, spa
 denoising autoencoder are comparable.
 For the same reason, all the softmax regression classifiers used by RBM, sparse autoencoder and
 denoising autoencoder are trained with Adam optimizer of batch size 100 for 100 epochs,
-with exponentially decay learning rate starting at 0.01,
-with dropout technique of keep probability 0.8.
-
+with exponentially decay learning rate starting at 0.01, with dropout of keep probability 0.8.
