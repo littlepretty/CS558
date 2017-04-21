@@ -76,9 +76,10 @@ Considering both the high accuracy and best F1-Score, we conclude that in the co
 Confusion matrices here tell us something interesting about the 
 MLP correctly recognized the most number of normal traffics (9343 out of 9711).
 For the attacking traffics, the winner classifier MLP correctly predicted the most
-number of Probe (2111 out of 2425) and DoS (6155 out of 7636) attacks.
+number of DoS attacks (6155 out of 7636).
+RBM correctly identified the most number of Probe attacks (2015 out of 2425).
 Both MLP and DAE correctly discovered the most number of U2R attacks (38 out of 396).
-Sparse autoencoder identified the most number of R2L attacks (895 out of 2376).
+Sparse autoencoder identified the most number of R2L attacks correctly (895 out of 2376).
 
 \begin{table}[t]
     \caption{Confusion Matrix of MLP on Test Dataset}
@@ -89,17 +90,17 @@ Sparse autoencoder identified the most number of R2L attacks (895 out of 2376).
                         &        & Normal & Probe & DoS & U2R & R2L\\
         \hline
         \hline
-        \multirow{5}{*}{Actual} & Normal & 9343 &  229 &   64 &  26 &  49 \\
+        \multirow{5}{*}{Actual} & Normal & {\color{red}9343} &  229 &   64 &  26 &  49 \\
                                 &  Probe &  201 & 1925 &  227 &   9 &  63 \\
-                                &  DoS   & 1332 &   68 & 6155 &  47 &  34 \\
-                                &  U2R   &  347 &    4 &    0 &  38 &   7 \\
+                                &  DoS   & 1332 &   68 & {\color{red}6155} &  47 &  34 \\
+                                &  U2R   &  347 &    4 &    0 &  {\color{red}38} &   7 \\
                                 &  R2L   & 1393 &   37 &    1 & 168 & 777 \\
         \hline
         \multicolumn{2}{c|}{Precision(\%)}   & 74.06 & 85.06 & 95.47 & 13.19 & 83.55\\
-        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{82.43}\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{\color{red}82.43}\\
         \hline
         \multicolumn{2}{c|}{Recall(\%)}      & 96.21 & 79.38 & 80.61 &  9.6  & 32.7\\
-        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{80.90}\\
+        \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{\color{red}80.90}\\
         \hline
         \multicolumn{2}{c|}{F1-Score(\%)}    & 83.69 & 82.12 & 87.41 & 11.11 & 47.01\\
         \multicolumn{2}{c|}{Wtd. Avg.(\%)}   & \multicolumn{5}{r}{\color{red}79.64}\\
@@ -119,7 +120,7 @@ Sparse autoencoder identified the most number of R2L attacks (895 out of 2376).
         \hline
         \hline
         \multirow{5}{*}{Actual} & Normal & 8903 &  318 &  428 &  11 &   51 \\
-                                & Probe  &  232 & 2015 &  159 &   2 &   17 \\
+                                & Probe  &  232 & {\color{red}2015} &  159 &   2 &   17 \\
                                 & DoS    & 1879 &  143 & 5613 &   0 &    1 \\
                                 & U2R    &  356 &    3 &    1 &  27 &    9 \\
                                 & R2L    & 1550 &    8 &    1 &   8 &  809 \\
@@ -150,7 +151,7 @@ Sparse autoencoder identified the most number of R2L attacks (895 out of 2376).
                                  & Probe  &  179 & 2001 &  164 &    2 &   79 \\
                                  & DoS    & 1542 &   39 & 6054 &    0 &    1 \\
                                  & U2R    &  357 &    1 &    1 &   30 &    7 \\
-                                 & R2L    & 1444 &    6 &    5 &   26 &  895 \\
+                                 & R2L    & 1444 &    6 &    5 &   26 &  {\color{red}895} \\
         \hline
         \multicolumn{2}{c|}{Precision(\%)}    & 71.56& 72.95& 95.85& 43.48& 86.89\\
         \multicolumn{2}{c|}{Wtd. Avg.(\%)}    & \multicolumn{5}{r}{81.06}\\
@@ -178,7 +179,7 @@ Sparse autoencoder identified the most number of R2L attacks (895 out of 2376).
         \multirow{5}{*}{Actual} & Normal & 9249 &  319 &   85 &  10 &  48 \\
                                 & Probe  & 576  & 1504 &  226 &   2 & 117 \\
                                 & DoS    & 1842 &  128 & 5665 &   0 &   1 \\
-                                & U2R    & 353  &    1 &    0 &  38 &   4 \\
+                                & U2R    & 353  &    1 &    0 &  {\color{red}38} &   4 \\
                                 & R2L    & 1469 &    3 &    1 &  17 & 886 \\
         \hline
         \multicolumn{2}{c|}{Precision(\%)} & 68.57& 76.93& 94.78& 56.72& 83.90\\
